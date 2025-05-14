@@ -142,7 +142,7 @@ int main(void) {
 
 The reverse shell payload is not included directly in the source. Instead, it's stored in the `.rsrc` section of the PE file. Learn more about this technique in this writeup:
 
-> 📖 [Storing Payload in PE File (Medium article)](https://medium.com)
+> [Storing Payload in PE File (Medium article)](https://medium.com)
 
 ## Function Breakdown
 
