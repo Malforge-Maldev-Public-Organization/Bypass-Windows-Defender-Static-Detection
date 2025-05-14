@@ -158,7 +158,7 @@ This project is a practical example of basic static detection evasion for educat
 
 More to come — including full evasion from Windows Defender.
 
--- **Malforge Group**
+— **Malforge Group**
 
 
 ---
