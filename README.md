@@ -1,0 +1,1 @@
+# Bypass-Windows-Defender-Static-Detection
