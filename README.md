@@ -144,6 +144,33 @@ The reverse shell payload is not included directly in the source. Instead, it's 
 
 > 📖 [Storing Payload in PE File (Medium article)](https://medium.com)
 
+## Function Breakdown
+
+The malware is composed of four primary functions:
+
+### 1. `XOR`
+This function performs a simple XOR encryption/decryption on a data buffer using a provided key. While often referred to as encoding, the use of a key classifies this operation as encryption. The function iterates through the data, applying the XOR operation with the repeating key to obfuscate or reveal the payload.
+
+### 2. `FindTarget`
+This function takes the name of a process as input and returns its Process ID (PID). It leverages `CreateToolhelp32Snapshot` to list all running processes, and uses `Process32First` and `Process32Next` to iterate through them. If the specified process name matches, it extracts and returns the corresponding PID.
+
+### 3. `Inject`
+This function handles shellcode injection into a target process. It performs three key steps:
+- **Memory Allocation**: Allocates memory in the remote process using `VirtualAllocEx`.
+- **Payload Writing**: Writes the shellcode into the allocated memory with `WriteProcessMemory`.
+- **Execution**: Executes the shellcode using `CreateRemoteThread`.
+
+### 4. `main`
+The `main` function serves as the entry point. It:
+- Extracts an encrypted shellcode payload from the `.rsrc` section (`favicon.ico`).
+- Allocates local memory with `VirtualAlloc`.
+- Copies and decrypts the payload using the `XOR` function.
+- Finds the PID of `explorer.exe` using `FindTarget`.
+- Injects the decrypted payload into `explorer.exe` using `Inject`.
+
+The approach ensures the shellcode is hidden from static analysis via resource embedding and encryption, and uses remote thread creation for execution within a trusted process context.
+
+
 ---
 
 ## Result
@@ -152,6 +179,10 @@ After compiling the binary and scanning it with Windows Defender, it triggers de
 
 ---
 
+## POC
+
+![image](https://github.com/user-attachments/assets/897a9e0e-2789-4b7d-bce3-d101baded034)
+
 ## Conclusion
 
 This project is a practical example of basic static detection evasion for educational purposes. I hope it helps anyone learning about red teaming and malware development.
@@ -159,7 +190,6 @@ This project is a practical example of basic static detection evasion for educat
 More to come — including full evasion from Windows Defender.
 
 — **Malforge Group**
-
 
 ---
 
